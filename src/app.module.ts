@@ -1,13 +1,14 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FacultyModule } from './faculty/faculty.module';
+import { FacultyModule } from './api/faculty/faculty.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './common/helper/env.helper';
 import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { BranchModule } from './api/branch/branch.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 @Module({
@@ -15,6 +16,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     FacultyModule,
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+    BranchModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],
