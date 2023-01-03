@@ -22,8 +22,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 export class AppModule implements NestModule {
   constructor(private datasource: DataSource) {}
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('faculty');
-    consumer.apply(LoggerMiddleware).forRoutes('branch');
-    consumer.apply(LoggerMiddleware).forRoutes('course_subject');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

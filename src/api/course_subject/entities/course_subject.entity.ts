@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Credit } from 'src/api/credit/entities/credit.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('course_subject')
 export class CourseSubject {
@@ -10,4 +11,7 @@ export class CourseSubject {
 
   @Column()
   credit: number;
+
+  @OneToMany(() => Credit, (credit) => credit.user)
+  credits: Credit[];
 }

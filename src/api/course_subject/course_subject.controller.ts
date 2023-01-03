@@ -12,7 +12,7 @@ import { CourseSubjectService } from './course_subject.service';
 import { CreateCourseSubjectDto } from './dto/create-course_subject.dto';
 import { UpdateCourseSubjectDto } from './dto/update-course_subject.dto';
 
-@Controller('course-subject')
+@Controller('/api/course-subject')
 @ApiTags('course-subject')
 export class CourseSubjectController {
   constructor(private readonly courseSubjectService: CourseSubjectService) {}
