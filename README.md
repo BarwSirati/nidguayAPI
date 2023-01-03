@@ -29,5 +29,5 @@ npm start
 ```
 
 ---
-<div style="font-weight:bold; text-align:right;">&diams; Created By BXDMAN &diams;</div>
+<div align="right" style="font-weight:bold;">&diams; Created By BXDMAN &diams;</div>
 
