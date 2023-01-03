@@ -12,7 +12,7 @@ import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
 
-@Controller('/api/branch')
+@Controller('branch')
 @ApiTags('branch')
 export class BranchController {
   constructor(private readonly branchService: BranchService) {}

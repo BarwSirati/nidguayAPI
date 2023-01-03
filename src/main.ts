@@ -41,7 +41,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, configAPI);
   SwaggerModule.setup('document', app, document);
-
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   app.register(helmet, {

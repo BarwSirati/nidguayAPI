@@ -12,7 +12,7 @@ import { CreditService } from './credit.service';
 import { CreateCreditDto } from './dto/create-credit.dto';
 import { UpdateCreditDto } from './dto/update-credit.dto';
 
-@Controller('/api/credit')
+@Controller('credit')
 @ApiTags('credit')
 export class CreditController {
   constructor(private readonly creditService: CreditService) {}

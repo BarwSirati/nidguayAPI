@@ -9,7 +9,7 @@ import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { ApiModule } from './api/api.module';
 
-const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
+const envFilePath: string = getEnvPath();
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
