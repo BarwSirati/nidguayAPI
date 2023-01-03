@@ -5,7 +5,7 @@
 ###### API for KMITL student who want to know credit for all semester
 
 ### Stack
-- ExpressJs
+- NestJS
 - Postgresql
 
 
