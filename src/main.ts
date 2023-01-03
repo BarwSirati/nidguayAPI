@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -17,6 +18,16 @@ async function bootstrap() {
 
   const config: ConfigService = app.get(ConfigService);
   const port: number = config.get<number>('PORT');
+
+  const configAPI = new DocumentBuilder()
+    .setTitle('Nidguay API')
+    .setDescription('Nidguay API description')
+    .setVersion('1.0')
+    .addTag('Nidguay')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, configAPI);
+  SwaggerModule.setup('document', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.register(compression, { encodings: ['gzip', 'deflate'] });

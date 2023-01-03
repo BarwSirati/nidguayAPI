@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
 
 @Controller('branch')
+@ApiTags('branch')
 export class BranchController {
   constructor(private readonly branchService: BranchService) {}
 

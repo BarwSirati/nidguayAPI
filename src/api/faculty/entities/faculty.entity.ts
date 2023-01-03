@@ -7,7 +7,4 @@ export class Faculty {
 
   @Column()
   name: string;
-
-  @Column()
-  credit: number;
 }
