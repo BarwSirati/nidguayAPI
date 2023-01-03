@@ -8,7 +8,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-
+import { json, urlencoded } from 'body-parser';
 import compression from '@fastify/compress';
 
 async function bootstrap() {
@@ -16,18 +16,19 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  // const whitelist = ['http://localhost:3000'];
+  const whitelist = ['http://localhost'];
 
-  // app.enableCors({
-  //   origin: (origin, callback) => {
-  //     if (whitelist.indexOf(origin) !== -1) {
-  //       callback(null, true);
-  //     } else {
-  //       callback(new Error('Sorry, you are not allowed to join the party!'));
-  //     }
-  //   },
-  //   credentials: true,
-  // });
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Sorry, you are not allowed to join the party!'));
+      }
+    },
+    optionsSuccessStatus: 200,
+    methods: ['POST', 'GET', 'PATCH', 'DELETE'],
+  });
 
   const config: ConfigService = app.get(ConfigService);
   const port: number = config.get<number>('PORT');
@@ -43,6 +44,8 @@ async function bootstrap() {
   SwaggerModule.setup('document', app, document);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
+  app.use(json({ limit: '1mb' }));
+  app.use(urlencoded({ extended: true }));
   app.register(helmet, {
     contentSecurityPolicy: {
       directives: {
