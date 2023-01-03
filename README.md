@@ -19,9 +19,14 @@
 git clone https://github.com/BarwSirati/nidguayAPI.git
 ```
 
+***Format***
+```bash
+npm run format
+```
+
 ***Dev***
 ```bash
-npm run dev
+npm run start:dev
 ```
 
 ***Production***
