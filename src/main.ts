@@ -32,16 +32,25 @@ async function bootstrap() {
 
   const config: ConfigService = app.get(ConfigService);
   const port: number = config.get<number>('PORT');
+  if (
+    process.env.NODE_ENV !== 'production' ||
+    process.env.NODE_ENV === undefined
+  ) {
+    const configAPI = new DocumentBuilder()
+      .setTitle('Nidguay API')
+      .setDescription('Nidguay API description')
+      .setVersion('1.0')
+      .addTag('Nidguay')
+      .build();
 
-  const configAPI = new DocumentBuilder()
-    .setTitle('Nidguay API')
-    .setDescription('Nidguay API description')
-    .setVersion('1.0')
-    .addTag('Nidguay')
-    .build();
+    const document = SwaggerModule.createDocument(app, configAPI);
+    SwaggerModule.setup('document', app, document, {
+      swaggerOptions: { defaultModelsExpandDepth: -1 },
+    });
+  } else {
+    app.setGlobalPrefix('api/v1');
+  }
 
-  const document = SwaggerModule.createDocument(app, configAPI);
-  SwaggerModule.setup('document', app, document);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true }));
