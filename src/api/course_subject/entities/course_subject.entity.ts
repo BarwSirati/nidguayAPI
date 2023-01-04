@@ -1,4 +1,4 @@
-import { Credit } from 'src/api/credit/entities/credit.entity';
+import { Credit } from '../../credit/entities/credit.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('course_subject')

@@ -1,5 +1,5 @@
-import { Faculty } from 'src/api/faculty/entities/faculty.entity';
-import { Branch } from 'src/api/branch/entities/branch.entity';
+import { Faculty } from '../../faculty/entities/faculty.entity';
+import { Branch } from '../../branch/entities/branch.entity';
 import {
   Column,
   Entity,

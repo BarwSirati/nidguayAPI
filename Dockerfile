@@ -35,17 +35,7 @@ FROM node:18-alpine as production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-ENV PORT port
-ENV DATABASE_HOST host
-ENV DATABASE_NAME name
-ENV DATABASE_USER user
-ENV DATABASE_PASSWORD password
-ENV DATABASE_SCHEMA schema
-ENV DATABASE_PORT port
-
-# EXPOSE $PORT
-
-CMD [ "node", "dist/main.js" ]
+CMD [ "npm","run","start:prod" ]
 
 
 

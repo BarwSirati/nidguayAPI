@@ -1,7 +1,7 @@
-import { CourseSubject } from 'src/api/course_subject/entities/course_subject.entity';
-import { User } from 'src/api/user/entities/user.entity';
-import { NoteType } from 'src/shared/interfaces/note_type.interface';
-import { TypeCourse } from 'src/shared/interfaces/type_course.interface';
+import { CourseSubject } from '../../course_subject/entities/course_subject.entity';
+import { User } from '../../user/entities/user.entity';
+import { NoteType } from '../../../shared/interfaces/note_type.interface';
+import { TypeCourse } from '../../../shared/interfaces/type_course.interface';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('credit')

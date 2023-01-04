@@ -3,19 +3,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import helmet from '@fastify/helmet';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { json, urlencoded } from 'body-parser';
-import compression from '@fastify/compress';
+import * as compression from 'compression';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
-  const app: NestFastifyApplication = await NestFactory.create(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  const app = await NestFactory.create(AppModule);
   const whitelist = ['http://localhost'];
 
   app.enableCors({
@@ -43,20 +36,25 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configAPI);
   SwaggerModule.setup('document', app, document);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-
+  app.use(compression());
+  app.use(helmet.contentSecurityPolicy());
+  app.use(helmet.crossOriginEmbedderPolicy());
+  app.use(helmet.crossOriginOpenerPolicy());
+  app.use(helmet.crossOriginResourcePolicy());
+  app.use(helmet.dnsPrefetchControl());
+  app.use(helmet.expectCt());
+  app.use(helmet.frameguard());
+  app.use(helmet.hidePoweredBy());
+  app.use(helmet.hsts());
+  app.use(helmet.ieNoOpen());
+  app.use(helmet.noSniff());
+  app.use(helmet.originAgentCluster());
+  app.use(helmet.permittedCrossDomainPolicies());
+  app.use(helmet.referrerPolicy());
+  app.use(helmet.xssFilter());
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true }));
-  app.register(helmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: [`'self'`],
-        styleSrc: [`'self'`, `'unsafe-inline'`],
-        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-      },
-    },
-  });
-  await app.register(compression, { encodings: ['gzip', 'deflate'] });
+
   await app.listen(port);
 }
 bootstrap();
