@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateFacultyDto } from './dto/create-faculty.dto';
@@ -10,23 +10,52 @@ export class FacultyService {
   constructor(
     @InjectRepository(Faculty) private facultyRepository: Repository<Faculty>,
   ) {}
-  create(createFacultyDto: CreateFacultyDto) {
-    return 'This action adds a new faculty';
+  async create(createFacultyDto: CreateFacultyDto): Promise<Faculty> {
+    try {
+      const faculty = await this.facultyRepository.create(createFacultyDto);
+      return this.facultyRepository.save(faculty);
+    } catch (err) {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findAll() {
-    return this.facultyRepository.find();
+  async findAll(): Promise<Faculty[]> {
+    return await this.facultyRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} faculty`;
+  async findOne(id: number): Promise<Faculty> {
+    const faculty = await this.facultyRepository.findOne({ where: { id: id } });
+    if (faculty) {
+      return faculty;
+    }
+    throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
 
-  update(id: number, updateFacultyDto: UpdateFacultyDto) {
-    return `This action updates a #${id} faculty`;
+  async update(
+    id: number,
+    updateFacultyDto: UpdateFacultyDto,
+  ): Promise<Faculty> {
+    try {
+      const fetch = await this.findOne(id);
+      if (fetch) {
+        await this.facultyRepository.update(id, updateFacultyDto);
+        return await this.findOne(id);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    } catch (err) {
+      throw new HttpException(
+        'INTERNAL_SERVER_ERROR',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} faculty`;
+  async remove(id: number) {
+    const fetch = await this.findOne(id);
+    if (fetch) {
+      await this.facultyRepository.delete(id);
+      return new HttpException('OK', HttpStatus.OK);
+    }
+    throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
 }
