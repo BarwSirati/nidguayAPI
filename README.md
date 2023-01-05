@@ -13,7 +13,6 @@
 ###### This API is a prototype, I created it for computer engineering student
 
 ### How it's use??
-
 ***Clone***
 ```bash
 git clone https://github.com/BarwSirati/nidguayAPI.git
@@ -32,6 +31,17 @@ npm run start:dev
 ***Production***
 ```bash
 npm start
+```
+
+### Deploy
+***Database (Only Database)***
+```bash
+docker-compose -f docker-compose.db.yml -d
+```
+
+***Application***
+```bash
+docker-compose up -d
 ```
 
 ---
