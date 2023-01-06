@@ -11,6 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
+import { Branch } from './entities/branch.entity';
 
 @Controller('branch')
 @ApiTags('branch')
@@ -18,27 +19,30 @@ export class BranchController {
   constructor(private readonly branchService: BranchService) {}
 
   @Post()
-  create(@Body() createBranchDto: CreateBranchDto) {
-    return this.branchService.create(createBranchDto);
+  async create(@Body() createBranchDto: CreateBranchDto): Promise<Branch> {
+    return await this.branchService.create(createBranchDto);
   }
 
   @Get()
-  findAll() {
-    return this.branchService.findAll();
+  async findAll(): Promise<Branch[]> {
+    return await this.branchService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.branchService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Branch> {
+    return await this.branchService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBranchDto: UpdateBranchDto) {
-    return this.branchService.update(+id, updateBranchDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateBranchDto: UpdateBranchDto,
+  ): Promise<Branch> {
+    return await this.branchService.update(+id, updateBranchDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.branchService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.branchService.remove(+id);
   }
 }

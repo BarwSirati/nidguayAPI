@@ -25,9 +25,7 @@ export class FacultyService {
 
   async findOne(id: number): Promise<Faculty> {
     const faculty = await this.facultyRepository.findOne({ where: { id: id } });
-    if (faculty) {
-      return faculty;
-    }
+    if (faculty) return faculty;
     throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
 
@@ -54,7 +52,7 @@ export class FacultyService {
     const fetch = await this.findOne(id);
     if (fetch) {
       await this.facultyRepository.delete(id);
-      return new HttpException('OK', HttpStatus.OK);
+      throw new HttpException('OK', HttpStatus.OK);
     }
     throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
