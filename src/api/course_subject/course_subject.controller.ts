@@ -11,37 +11,38 @@ import { ApiTags } from '@nestjs/swagger';
 import { CourseSubjectService } from './course_subject.service';
 import { CreateCourseSubjectDto } from './dto/create-course_subject.dto';
 import { UpdateCourseSubjectDto } from './dto/update-course_subject.dto';
+import { CourseSubject } from './entities/course_subject.entity';
 
-@Controller('course-subject')
-@ApiTags('course-subject')
+@Controller('courseSubject')
+@ApiTags('courseSubject')
 export class CourseSubjectController {
   constructor(private readonly courseSubjectService: CourseSubjectService) {}
 
   @Post()
-  create(@Body() createCourseSubjectDto: CreateCourseSubjectDto) {
-    return this.courseSubjectService.create(createCourseSubjectDto);
+  async create(@Body() createCourseSubjectDto: CreateCourseSubjectDto) {
+    return await this.courseSubjectService.create(createCourseSubjectDto);
   }
 
   @Get()
-  findAll() {
-    return this.courseSubjectService.findAll();
+  async findAll(): Promise<CourseSubject[]> {
+    return await this.courseSubjectService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.courseSubjectService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<CourseSubject> {
+    return await this.courseSubjectService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCourseSubjectDto: UpdateCourseSubjectDto,
-  ) {
-    return this.courseSubjectService.update(+id, updateCourseSubjectDto);
+  ): Promise<CourseSubject> {
+    return this.courseSubjectService.update(id, updateCourseSubjectDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.courseSubjectService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.courseSubjectService.remove(id);
   }
 }

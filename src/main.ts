@@ -37,9 +37,14 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, configAPI);
+
     SwaggerModule.setup('document', app, document, {
       swaggerOptions: { defaultModelsExpandDepth: -1 },
     });
+
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
   } else {
     app.setGlobalPrefix('api/v1');
   }
@@ -59,7 +64,7 @@ async function bootstrap() {
   app.use(helmet.permittedCrossDomainPolicies());
   app.use(helmet.referrerPolicy());
   app.use(helmet.xssFilter());
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true }));
   await app.listen(port);
