@@ -29,7 +29,6 @@ export class BranchService {
   async findOne(id: number): Promise<Branch> {
     const branch = await this.branchRepository.findOne({ where: { id: id } });
     if (branch) return branch;
-    throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
 
   async update(id: number, updateBranchDto: UpdateBranchDto): Promise<Branch> {

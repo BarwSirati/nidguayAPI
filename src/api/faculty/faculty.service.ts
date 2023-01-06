@@ -26,7 +26,6 @@ export class FacultyService {
   async findOne(id: number): Promise<Faculty> {
     const faculty = await this.facultyRepository.findOne({ where: { id: id } });
     if (faculty) return faculty;
-    throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
   }
 
   async update(
