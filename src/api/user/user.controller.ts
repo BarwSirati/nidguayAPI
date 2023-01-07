@@ -43,7 +43,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id') id: string, @GetUser() user: User): Promise<User> {
-    if (user.id !== id)
+    if (user.id !== id && user.roles === 'user')
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return await this.userService.findOne(id);
   }
@@ -54,7 +54,7 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @GetUser() user: User,
   ): Promise<User> {
-    if (user.id !== id)
+    if (user.id !== id && user.roles === 'user')
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return await this.userService.update(id, updateUserDto);
   }

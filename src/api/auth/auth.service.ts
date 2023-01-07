@@ -3,6 +3,8 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +20,15 @@ export class AuthService {
     const compare = await bcrypt.compare(loginDto.password, user.password);
     if (!compare) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return this.signToken(user.id, user.roles);
+  }
+
+  async register(registerDto: CreateUserDto): Promise<User> {
+    try {
+      const user = await this.userService.create(registerDto);
+      return user;
+    } catch (err) {
+      throw new HttpException('Conflict', HttpStatus.CONFLICT);
+    }
   }
 
   async signToken(userId: string, role: string): Promise<object> {
