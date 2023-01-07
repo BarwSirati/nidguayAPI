@@ -15,6 +15,9 @@ export class CreateUserDto {
   @IsString()
   lastname: string;
 
+  @IsString()
+  password: string;
+
   @IsNumber()
   facultyId: number;
 

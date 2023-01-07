@@ -24,6 +24,10 @@ export class UpdateUserDto {
   @IsOptional()
   lastname?: string;
 
+  @IsString()
+  @IsOptional()
+  password?: string;
+
   @IsNumber()
   @IsOptional()
   facultyId?: number;

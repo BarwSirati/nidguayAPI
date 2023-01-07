@@ -7,6 +7,7 @@ import { FacultyService } from '../faculty/faculty.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -27,6 +28,8 @@ export class UserService {
       if (Object.keys(faculty).length == 0 || Object.keys(branch).length == 0)
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 
+      const salt = 12;
+      createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
       const newUser: User = {
         ...createUserDto,
         branch: branch,
@@ -60,6 +63,13 @@ export class UserService {
         if (updateUserDto.id) {
           const user = await this.findOne(updateUserDto.id);
           if (user) throw new HttpException('Conflict', HttpStatus.CONFLICT);
+        }
+        if (updateUserDto.password) {
+          const salt = 12;
+          updateUserDto.password = await bcrypt.hash(
+            updateUserDto.password,
+            salt,
+          );
         }
         await this.userRepository.update(id, updateUserDto);
         if (updateUserDto.id) return await this.findOne(updateUserDto.id);

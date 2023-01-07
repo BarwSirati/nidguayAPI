@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { CreditInterface } from '../../../shared/interfaces/credit.interface';
 import { Credit } from '../../credit/entities/credit.entity';
+import { Role } from 'src/shared/interfaces/role.interface';
 
 @Entity('user')
 export class User {
@@ -21,6 +22,9 @@ export class User {
 
   @Column()
   lastname: string;
+
+  @Column()
+  password: string;
 
   @ManyToOne(() => Faculty, (faculty) => faculty.users)
   @JoinColumn({ name: 'facultyId' })
@@ -54,4 +58,11 @@ export class User {
   @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
   @JoinColumn({ name: 'id' })
   credits?: Credit[];
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  roles?: Role;
 }
