@@ -38,9 +38,7 @@ async function bootstrap() {
 
     const document = SwaggerModule.createDocument(app, configAPI);
 
-    SwaggerModule.setup('document', app, document, {
-      swaggerOptions: { defaultModelsExpandDepth: -1 },
-    });
+    SwaggerModule.setup('document', app, document);
 
     app.useGlobalPipes(
       new ValidationPipe({ whitelist: true, transform: true }),
