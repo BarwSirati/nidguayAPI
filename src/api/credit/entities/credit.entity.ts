@@ -9,10 +9,10 @@ export class Credit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.credits)
+  @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @ManyToOne(() => CourseSubject, (course_subject) => course_subject.credits)
+  @ManyToOne(() => CourseSubject, (course_subject) => course_subject.id)
   courseSubject: CourseSubject;
 
   @Column()

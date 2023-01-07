@@ -20,6 +20,7 @@ export class CreateUserDto {
 
   @IsNumber()
   branchId: number;
+
   @Type(() => CreditClass)
   credit: CreditInterface;
 }

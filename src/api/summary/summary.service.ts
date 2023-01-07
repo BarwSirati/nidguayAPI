@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SummaryService {
-  findAll() {
+  async findAll() {
     return `This action returns all summary`;
   }
 

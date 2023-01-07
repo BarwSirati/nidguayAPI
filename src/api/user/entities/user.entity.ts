@@ -1,15 +1,7 @@
 import { Faculty } from '../../faculty/entities/faculty.entity';
 import { Branch } from '../../branch/entities/branch.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-} from 'typeorm';
-import { CreditInterface } from 'src/shared/interfaces/credit.interface';
-import { Credit } from 'src/api/credit/entities/credit.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { CreditInterface } from '../../../shared/interfaces/credit.interface';
 
 @Entity('user')
 export class User {
@@ -22,12 +14,12 @@ export class User {
   @Column()
   lastname: string;
 
-  @OneToOne(() => Faculty, (faculty) => faculty.id)
-  @JoinColumn()
+  @ManyToOne(() => Faculty, (faculty) => faculty.users)
+  @JoinColumn({ name: 'facultyId' })
   faculty: Faculty;
 
-  @OneToOne(() => Branch, (branch) => branch.id)
-  @JoinColumn()
+  @ManyToOne(() => Branch, (branch) => branch.users)
+  @JoinColumn({ name: 'branchId' })
   branch: Branch;
 
   @Column({
@@ -50,7 +42,4 @@ export class User {
     },
   })
   credit: CreditInterface;
-
-  @OneToMany(() => Credit, (credit) => credit.user)
-  credits: Credit[];
 }

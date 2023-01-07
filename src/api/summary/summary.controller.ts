@@ -6,8 +6,8 @@ export class SummaryController {
   constructor(private readonly summaryService: SummaryService) {}
 
   @Get()
-  findAll() {
-    return this.summaryService.findAll();
+  async findAll() {
+    return await this.summaryService.findAll();
   }
 
   @Get(':year')
