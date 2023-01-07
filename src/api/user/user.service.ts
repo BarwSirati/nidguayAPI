@@ -23,14 +23,16 @@ export class UserService {
         createUserDto.facultyId,
       );
       const branch = await this.branchService.findOne(createUserDto.branchId);
-      if (faculty && branch) {
-        const newUser: User = {
-          ...createUserDto,
-          branch: branch,
-          faculty: faculty,
-        };
-        return this.userRepository.save(newUser);
-      }
+
+      if (Object.keys(faculty).length == 0 || Object.keys(branch).length == 0)
+        throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+
+      const newUser: User = {
+        ...createUserDto,
+        branch: branch,
+        faculty: faculty,
+      };
+      return this.userRepository.save(newUser);
     } catch (err) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }

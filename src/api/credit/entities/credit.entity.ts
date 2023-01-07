@@ -2,14 +2,21 @@ import { CourseSubject } from '../../course_subject/entities/course_subject.enti
 import { User } from '../../user/entities/user.entity';
 import { NoteType } from '../../../shared/interfaces/note_type.interface';
 import { TypeCourse } from '../../../shared/interfaces/type_course.interface';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('credit')
 export class Credit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.credits)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ManyToOne(() => CourseSubject, (course_subject) => course_subject.id)

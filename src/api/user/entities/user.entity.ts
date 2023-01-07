@@ -1,7 +1,15 @@
 import { Faculty } from '../../faculty/entities/faculty.entity';
 import { Branch } from '../../branch/entities/branch.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { CreditInterface } from '../../../shared/interfaces/credit.interface';
+import { Credit } from '../../credit/entities/credit.entity';
 
 @Entity('user')
 export class User {
@@ -42,4 +50,8 @@ export class User {
     },
   })
   credit: CreditInterface;
+
+  @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
+  @JoinColumn({ name: 'id' })
+  credits?: Credit[];
 }
