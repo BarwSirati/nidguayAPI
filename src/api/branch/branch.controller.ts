@@ -6,39 +6,54 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Role } from 'src/shared/interfaces/role.interface';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { JwtGuard } from '../auth/guard/jwt.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
+import { Branch } from './entities/branch.entity';
 
 @Controller('branch')
 @ApiTags('branch')
 export class BranchController {
   constructor(private readonly branchService: BranchService) {}
 
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Post()
-  create(@Body() createBranchDto: CreateBranchDto) {
-    return this.branchService.create(createBranchDto);
+  async create(@Body() createBranchDto: CreateBranchDto): Promise<Branch> {
+    return await this.branchService.create(createBranchDto);
   }
 
   @Get()
-  findAll() {
-    return this.branchService.findAll();
+  async findAll(): Promise<Branch[]> {
+    return await this.branchService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.branchService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Branch> {
+    return await this.branchService.findOne(+id);
   }
 
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBranchDto: UpdateBranchDto) {
-    return this.branchService.update(+id, updateBranchDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateBranchDto: UpdateBranchDto,
+  ): Promise<Branch> {
+    return await this.branchService.update(+id, updateBranchDto);
   }
 
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.branchService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.branchService.remove(+id);
   }
 }
