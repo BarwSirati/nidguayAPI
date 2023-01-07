@@ -4,12 +4,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { CreditInterface } from 'src/shared/interfaces/credit.interface';
-import { Credit } from 'src/api/credit/entities/credit.entity';
+import { CreditInterface } from '../../../shared/interfaces/credit.interface';
+import { Credit } from '../../credit/entities/credit.entity';
+import { Role } from 'src/shared/interfaces/role.interface';
 
 @Entity('user')
 export class User {
@@ -22,12 +23,15 @@ export class User {
   @Column()
   lastname: string;
 
-  @OneToOne(() => Faculty, (faculty) => faculty.id)
-  @JoinColumn()
+  @Column()
+  password: string;
+
+  @ManyToOne(() => Faculty, (faculty) => faculty.users)
+  @JoinColumn({ name: 'facultyId' })
   faculty: Faculty;
 
-  @OneToOne(() => Branch, (branch) => branch.id)
-  @JoinColumn()
+  @ManyToOne(() => Branch, (branch) => branch.users)
+  @JoinColumn({ name: 'branchId' })
   branch: Branch;
 
   @Column({
@@ -51,6 +55,14 @@ export class User {
   })
   credit: CreditInterface;
 
-  @OneToMany(() => Credit, (credit) => credit.user)
-  credits: Credit[];
+  @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
+  @JoinColumn({ name: 'id' })
+  credits?: Credit[];
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  roles?: Role;
 }
