@@ -46,8 +46,14 @@ export class CourseSubjectService {
     try {
       const fetch = await this.findOne(id);
       if (fetch) {
+        if (updateCourseSubjectDto.id) {
+          const subject = await this.findOne(updateCourseSubjectDto.id);
+          if (subject) throw new HttpException('Conflict', HttpStatus.CONFLICT);
+        }
         await this.courseSubjectRepository.update(id, updateCourseSubjectDto);
-        return await this.findOne(id);
+        if (updateCourseSubjectDto.id)
+          return await this.findOne(updateCourseSubjectDto.id);
+        else return await this.findOne(id);
       }
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     } catch (err) {
