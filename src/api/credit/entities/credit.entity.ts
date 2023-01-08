@@ -22,12 +22,6 @@ export class Credit {
   @ManyToOne(() => CourseSubject, (course_subject) => course_subject.id)
   courseSubject: CourseSubject;
 
-  @Column()
-  year: number;
-
-  @Column()
-  semester: number;
-
   @Column({
     type: 'enum',
     enum: TypeCourse,

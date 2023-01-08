@@ -62,7 +62,6 @@ async function bootstrap() {
   app.use(helmet.permittedCrossDomainPolicies());
   app.use(helmet.referrerPolicy());
   app.use(helmet.xssFilter());
-
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true }));
   await app.listen(port);
