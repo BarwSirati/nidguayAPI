@@ -16,5 +16,6 @@ import { CourseSubjectModule } from '../course_subject/course_subject.module';
   ],
   controllers: [CreditController],
   providers: [CreditService],
+  exports: [CreditService],
 })
 export class CreditModule {}

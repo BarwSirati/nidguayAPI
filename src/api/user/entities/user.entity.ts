@@ -54,7 +54,11 @@ export class User {
       free_electives: 0,
     },
   })
-  credit: CreditInterface;
+  credit?: CreditInterface;
+
+  @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
+  @JoinColumn({ name: 'id' })
+  credits?: Credit[];
 
   @OneToMany(() => Education, (education) => education.user, { cascade: true })
   @JoinColumn({ name: 'id' })

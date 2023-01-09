@@ -24,11 +24,14 @@ export class CreditController {
   constructor(private readonly creditService: CreditService) {}
 
   @Post()
-  async create(@Body() createCreditDto: CreateCreditDto): Promise<Credit> {
-    return await this.creditService.create(createCreditDto);
+  async create(
+    @Body() createCreditDto: CreateCreditDto,
+    @GetUser() user: User,
+  ): Promise<Credit> {
+    return await this.creditService.create(createCreditDto, user.id);
   }
 
-  @Get(':id')
+  @Get('/education/:id')
   async findOne(
     @Param('id') id: string,
     @GetUser() user: User,

@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       if (user) return user;
       throw new HttpException('Unathorize', HttpStatus.UNAUTHORIZED);
     } catch (err) {
-      console.log(err);
+      throw new HttpException('Unathorize', HttpStatus.UNAUTHORIZED);
     }
   }
 }

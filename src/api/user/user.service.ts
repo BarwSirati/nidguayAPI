@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../../shared/interfaces/role.interface';
 
 @Injectable()
 export class UserService {
@@ -44,6 +45,7 @@ export class UserService {
   async findAll(): Promise<User[]> {
     const user = await this.userRepository.find({
       relations: { faculty: true, branch: true },
+      where: { roles: Role.User },
     });
     return user;
   }

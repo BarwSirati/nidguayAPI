@@ -49,7 +49,7 @@ export class EducationController {
   async findByUserId(
     @Param('id') id: string,
     @GetUser() user: User,
-  ): Promise<Education> {
+  ): Promise<Education[]> {
     if (user.id !== id && user.roles === 'user')
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     const userId = user.id;

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { HttpException } from '@nestjs/common/exceptions';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { FindCreditClass } from 'src/shared/class/findCredit.class';
+import { DataSource, Repository } from 'typeorm';
 import { CourseSubjectService } from '../course_subject/course_subject.service';
 import { EducationService } from '../education/education.service';
 import { UserService } from '../user/user.service';
@@ -16,9 +17,13 @@ export class CreditService {
     private userService: UserService,
     private educationService: EducationService,
     private courseSubjectService: CourseSubjectService,
+    @InjectDataSource() private dataSource: DataSource,
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
   ) {}
-  async create(createCreditDto: CreateCreditDto): Promise<Credit> {
+  async create(
+    createCreditDto: CreateCreditDto,
+    userId: string,
+  ): Promise<Credit> {
     try {
       const education = await this.educationService.findOne(
         createCreditDto.educationId,
@@ -26,11 +31,18 @@ export class CreditService {
       const courseSubject = await this.courseSubjectService.findOne(
         createCreditDto.courseSubjectId,
       );
-      if (education === undefined || courseSubject === undefined)
+
+      const user = await this.userService.findOne(userId);
+      if (
+        education === undefined ||
+        courseSubject === undefined ||
+        user === undefined
+      )
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 
       const credit: Credit = {
         ...createCreditDto,
+        user: user,
         education: education,
         courseSubject: courseSubject,
       };
@@ -38,6 +50,28 @@ export class CreditService {
     } catch (err) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async creditSumByYear(educationId: number) {
+    const sum = await this.creditRepository
+      .createQueryBuilder('credit')
+      .leftJoinAndSelect('credit.courseSubject', 'courseSubject')
+      .where('credit.educationId= :educationId', { educationId: educationId })
+      .select('SUM(courseSubject.credit)', 'totalCredit')
+      .getRawOne();
+    return sum;
+  }
+
+  async findAll(userId: string): Promise<FindCreditClass[]> {
+    const credit = await this.creditRepository
+      .createQueryBuilder('credit')
+      .leftJoinAndSelect('credit.courseSubject', 'courseSubject')
+      .select(['credit.typeCourse', 'credit.note', 'SUM(courseSubject.credit)'])
+      .groupBy('credit.typeCourse')
+      .addGroupBy('credit.note')
+      .where('credit.userId= :userId', { userId: userId })
+      .getRawMany();
+    return credit;
   }
 
   async findOne(id: number, userId: string): Promise<Credit[]> {

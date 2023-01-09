@@ -36,7 +36,7 @@ npm start
 ### Deploy
 ***Database (Only Database)***
 ```bash
-docker-compose -f docker-compose.db.yml -d
+docker-compose -f docker-compose.db.yml up -d
 ```
 
 ***Application***

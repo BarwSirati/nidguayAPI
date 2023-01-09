@@ -16,8 +16,15 @@ export class EducationService {
   async create(createEducationDto: CreateEducationDto): Promise<Education> {
     try {
       const user = await this.userService.findOne(createEducationDto.userId);
+      const education = await this.educationRepository.findOne({
+        where: {
+          user: { id: createEducationDto.userId },
+          year: createEducationDto.year,
+          semester: createEducationDto.semester,
+        },
+      });
       if (!user) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-
+      if (education) throw new HttpException('CONFLICT', HttpStatus.CONFLICT);
       const newEducation: Education = {
         ...createEducationDto,
         user: user,
@@ -44,9 +51,10 @@ export class EducationService {
     if (education) return education;
   }
 
-  async findByUserId(userId: string): Promise<Education> {
-    const education = await this.educationRepository.findOne({
+  async findByUserId(userId: string): Promise<Education[]> {
+    const education = await this.educationRepository.find({
       where: { user: { id: userId } },
+      order: { year: 'ASC' },
       relations: { user: true },
     });
     if (education) return education;
