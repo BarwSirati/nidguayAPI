@@ -1,5 +1,4 @@
 import { CourseSubject } from '../../course_subject/entities/course_subject.entity';
-import { User } from '../../user/entities/user.entity';
 import { NoteType } from '../../../shared/interfaces/note_type.interface';
 import { TypeCourse } from '../../../shared/interfaces/type_course.interface';
 import {
@@ -14,11 +13,7 @@ import { Education } from 'src/api/education/entities/education.entity';
 @Entity('credit')
 export class Credit {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => User, (user) => user.credits)
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  id?: number;
 
   @ManyToOne(() => Education, (education) => education.credits)
   @JoinColumn({ name: 'educationId' })

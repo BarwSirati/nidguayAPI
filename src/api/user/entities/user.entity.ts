@@ -56,10 +56,6 @@ export class User {
   })
   credit: CreditInterface;
 
-  @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
-  @JoinColumn({ name: 'id' })
-  credits?: Credit[];
-
   @OneToMany(() => Education, (education) => education.user, { cascade: true })
   @JoinColumn({ name: 'id' })
   educations?: Education[];
