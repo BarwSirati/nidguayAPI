@@ -9,24 +9,24 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Education } from 'src/api/education/entities/education.entity';
 
 @Entity('credit')
 export class Credit {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne(() => User, (user) => user.credits)
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @ManyToOne(() => Education, (education) => education.credits)
+  @JoinColumn({ name: 'educationId' })
+  education: Education;
+
   @ManyToOne(() => CourseSubject, (course_subject) => course_subject.id)
+  @JoinColumn({ name: 'courseSubjectId' })
   courseSubject: CourseSubject;
-
-  @Column()
-  year: number;
-
-  @Column()
-  semester: number;
 
   @Column({
     type: 'enum',

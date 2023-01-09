@@ -4,8 +4,9 @@ import { BranchModule } from './branch/branch.module';
 import { FacultyModule } from './faculty/faculty.module';
 import { CourseSubjectModule } from './course_subject/course_subject.module';
 import { CreditModule } from './credit/credit.module';
-import { SummaryModule } from './summary/summary.module';
 import { AuthModule } from './auth/auth.module';
+import { EducationModule } from './education/education.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { AuthModule } from './auth/auth.module';
     FacultyModule,
     CourseSubjectModule,
     CreditModule,
-    SummaryModule,
+    EducationModule,
     AuthModule,
+    SummaryModule,
   ],
 })
 export class ApiModule {}

@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../../shared/interfaces/role.interface';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,7 @@ export class UserService {
       );
       const branch = await this.branchService.findOne(createUserDto.branchId);
 
-      if (Object.keys(faculty).length == 0 || Object.keys(branch).length == 0)
+      if (faculty === undefined || branch === undefined)
         throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
 
       const salt = 12;
@@ -44,6 +45,7 @@ export class UserService {
   async findAll(): Promise<User[]> {
     const user = await this.userRepository.find({
       relations: { faculty: true, branch: true },
+      where: { roles: Role.User },
     });
     return user;
   }
@@ -60,6 +62,7 @@ export class UserService {
     try {
       const fetch = await this.findOne(id);
       if (fetch) {
+        const newUser = new User();
         if (updateUserDto.id) {
           const user = await this.findOne(updateUserDto.id);
           if (user) throw new HttpException('Conflict', HttpStatus.CONFLICT);
@@ -71,7 +74,34 @@ export class UserService {
             salt,
           );
         }
-        await this.userRepository.update(id, updateUserDto);
+
+        if (updateUserDto.branchId) {
+          const branch = await this.branchService.findOne(
+            updateUserDto.branchId,
+          );
+          if (branch === undefined)
+            throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+          newUser.branch = branch;
+          delete updateUserDto.branchId;
+        }
+
+        if (updateUserDto.facultyId) {
+          const faculty = await this.facultyService.findOne(
+            updateUserDto.facultyId,
+          );
+          if (faculty === undefined)
+            throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+
+          newUser.faculty = faculty;
+          delete updateUserDto.facultyId;
+        }
+
+        const user: User = {
+          ...updateUserDto,
+          ...newUser,
+        };
+
+        await this.userRepository.update(id, user);
         if (updateUserDto.id) return await this.findOne(updateUserDto.id);
         else return await this.findOne(id);
       }

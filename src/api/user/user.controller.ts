@@ -29,13 +29,6 @@ export class UserController {
 
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return await this.userService.create(createUserDto);
-  }
-
-  @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
   @Get()
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();

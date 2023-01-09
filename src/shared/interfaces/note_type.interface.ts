@@ -7,4 +7,5 @@ export enum NoteType {
   SPECIALIZED = 'specialized',
   OPTIONS = 'options',
   BRANCH = 'branch',
+  NULL = 'null',
 }
