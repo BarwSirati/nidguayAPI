@@ -6,6 +6,7 @@ import { CourseSubjectModule } from './course_subject/course_subject.module';
 import { CreditModule } from './credit/credit.module';
 import { SummaryModule } from './summary/summary.module';
 import { AuthModule } from './auth/auth.module';
+import { EducationModule } from './education/education.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
     CourseSubjectModule,
     CreditModule,
     SummaryModule,
+    EducationModule,
     AuthModule,
   ],
 })

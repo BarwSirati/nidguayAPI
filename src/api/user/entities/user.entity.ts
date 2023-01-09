@@ -11,6 +11,7 @@ import {
 import { CreditInterface } from '../../../shared/interfaces/credit.interface';
 import { Credit } from '../../credit/entities/credit.entity';
 import { Role } from 'src/shared/interfaces/role.interface';
+import { Education } from 'src/api/education/entities/education.entity';
 
 @Entity('user')
 export class User {
@@ -58,6 +59,10 @@ export class User {
   @OneToMany(() => Credit, (credit) => credit.user, { cascade: true })
   @JoinColumn({ name: 'id' })
   credits?: Credit[];
+
+  @OneToMany(() => Education, (education) => education.user, { cascade: true })
+  @JoinColumn({ name: 'id' })
+  educations?: Education[];
 
   @Column({
     type: 'enum',

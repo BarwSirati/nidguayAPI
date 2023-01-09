@@ -1,4 +1,13 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateEducationDto } from './create-education.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional } from 'class-validator';
+export class UpdateEducationDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  year?: number;
 
-export class UpdateEducationDto extends PartialType(CreateEducationDto) {}
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  semester?: number;
+}

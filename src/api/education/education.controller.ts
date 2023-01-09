@@ -1,34 +1,86 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { EducationService } from './education.service';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Education } from './entities/education.entity';
+import { GetUser } from '../auth/decorator/get-user.decorator';
+import { User } from '../user/entities/user.entity';
+import { UseGuards } from '@nestjs/common/decorators';
+import { JwtGuard } from '../auth/guard/jwt.guard';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { Role } from 'src/shared/interfaces/role.interface';
+import { RolesGuard } from '../auth/guard/roles.guard';
 
 @Controller('education')
+@ApiTags('education')
+@UseGuards(JwtGuard)
 export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
   @Post()
-  create(@Body() createEducationDto: CreateEducationDto) {
-    return this.educationService.create(createEducationDto);
+  async create(
+    @Body() createEducationDto: CreateEducationDto,
+    @GetUser() user: User,
+  ): Promise<Education> {
+    if (user.id !== createEducationDto.userId && user.roles === 'user')
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    return await this.educationService.create(createEducationDto);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Get()
-  findAll() {
-    return this.educationService.findAll();
+  async findAll(): Promise<Education[]> {
+    return await this.educationService.findAll();
+  }
+
+  @Get('/user/:id')
+  async findByUserId(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Education> {
+    if (user.id !== id && user.roles === 'user')
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    const userId = user.id;
+    return await this.educationService.findByUserId(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.educationService.findOne(+id);
+  async findOne(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Education> {
+    if (user.id !== id && user.roles === 'user')
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    return await this.educationService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEducationDto: UpdateEducationDto) {
-    return this.educationService.update(+id, updateEducationDto);
+  async update(
+    @Param('id') id: string,
+    @GetUser() user: User,
+    @Body() updateEducationDto: UpdateEducationDto,
+  ): Promise<Education> {
+    if (user.id !== id && user.roles === 'user')
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    return await this.educationService.update(+id, updateEducationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.educationService.remove(+id);
+  async remove(@Param('id') id: string, @GetUser() user: User) {
+    if (user.id !== id && user.roles === 'user')
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    return await this.educationService.remove(+id);
   }
 }
