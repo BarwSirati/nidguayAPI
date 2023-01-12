@@ -41,6 +41,11 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
+  @Get('/current/info')
+  async current(@GetUser() user: User): Promise<User> {
+    return user;
+  }
+
   @Patch(':id')
   async update(
     @Param('id') id: string,

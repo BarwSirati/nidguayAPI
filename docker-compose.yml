@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   app:
     container_name: 'NidGuayAPI'
@@ -16,7 +16,7 @@ services:
       - DATABASE_PASSWORD=qwerty
       - DATABASE_PORT=5432
       - SECRET_KEY=ComputerEngineering
-      - NODE_ENV=development
+      - NODE_ENV=production
   postgres:
     image: postgres
     restart: always
@@ -24,3 +24,5 @@ services:
       POSTGRES_DB: nidguay
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: qwerty
+    ports:
+      - 5430:5432
