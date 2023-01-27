@@ -16,13 +16,13 @@ kind: Service
 metadata:
   name: nidguay-pg
   namespace: nidguay
-  spec:
-    selector:
-      app: nidguay
-    ports:
-      - name: ng-pg-port
-        port: 5432
-        targetPort: 5432
+spec:
+  selector:
+    app: nidguay
+  ports:
+    - name: ng-pg-port
+      port: 5432
+      targetPort: 5432
 ---
 apiVersion: apps/v1
 kind: Deployment
