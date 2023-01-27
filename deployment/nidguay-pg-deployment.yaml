@@ -51,9 +51,12 @@ spec:
             - name: POSTGRES_PASSWORD
               value: qwerty
           resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1500m"
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: "1Gi"
+              cpu: "1500m"
           ports:
             - containerPort: 5432
               name: ng-pg-port
