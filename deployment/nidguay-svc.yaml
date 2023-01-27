@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nidguay-svc
+  namespace: nidguay
+spec:
+  selector:
+    app: nidguay
+  type: NodePort
+  ports:
+    - name: ng-pod-port
+      port: 3000
+      targetPort: 3000
+      nodePort: 31111
+    - name: ng-pg-port
+      port: 5432
+      targetPort: 5432
+      nodePort: 31112
