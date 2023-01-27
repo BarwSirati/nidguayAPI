@@ -31,7 +31,7 @@ spec:
         - name: nidguay
           env:
             - name: DATABASE_HOST
-              value: nidguay-pg
+              value: nidguay-pg-svc
             - name: DATABASE_NAME
               value: nidguay
             - name: DATABASE_PASSWORD
