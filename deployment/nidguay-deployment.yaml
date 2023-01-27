@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nidguay-svc
+  namespace: nidguay
+spec:
+  selector:
+    app: nidguay
+  type: NodePort
+  ports:
+    - name: ng-pod-port
+      port: 3000
+      targetPort: 3000
+      nodePort: 31111
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nidguay
+  namespace: nidguay
+spec:
+  selector:
+    matchLabels:
+      app: nidguay
+  template:
+    metadata:
+      labels:
+        app: nidguay
+    spec:
+      containers:
+        - name: nidguay-pg
+          image: postgres
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+        - name: nidguay
+          env:
+            - name: DATABASE_HOST
+              value: postgres
+            - name: DATABASE_NAME
+              value: nidguay
+            - name: DATABASE_PASSWORD
+              value: qwerty
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
+              value: postgres
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+            - name: SECRET_KEY
+              value: ComputerEngineering
+          image: nidguay-api:0.1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+              name: ng-pod-port
