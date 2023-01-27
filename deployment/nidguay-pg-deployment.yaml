@@ -1,11 +1,24 @@
-+apiVersion: v1
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nidguay-pv-claim
+  namespace: nidguay
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: nidguay-pg
   namespace: nidguay
   spec:
     selector:
-      app: nidguay-pg
+      app: nidguay
     ports:
       - name: ng-pg-port
         port: 5432
@@ -14,19 +27,19 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: niguay-pg
+  name: nidguay-pg
   namespace: nidguay
 spec:
   selector:
     matchLabels:
-      app: niguay-pg
+      app: nidguay
   template:
     metadata:
       labels:
-        app: niguay-pg
+        app: nidguay
     spec:
       containers:
-        - name: niguay-pg
+        - name: nidguay-pg
           image: postgres
           env:
             - name: POSTGRES_DB
@@ -42,3 +55,10 @@ spec:
           ports:
             - containerPort: 5432
               name: ng-pg-port
+          volumeMounts:
+            - name: nidguay-pg-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: nidguay-pg-volume
+          persistentVolumeClaim:
+            claimName: nidguay-pv-claim

@@ -28,16 +28,10 @@ spec:
         app: nidguay
     spec:
       containers:
-        - name: nidguay-pg
-          image: postgres
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
         - name: nidguay
           env:
             - name: DATABASE_HOST
-              value: postgres
+              value: nidguay-pg
             - name: DATABASE_NAME
               value: nidguay
             - name: DATABASE_PASSWORD
@@ -52,7 +46,7 @@ spec:
               value: "3000"
             - name: SECRET_KEY
               value: ComputerEngineering
-          image: nidguay-api:0.1
+          image: bxdman/nidguay:0.1
           resources:
             limits:
               memory: "128Mi"
