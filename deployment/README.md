@@ -3,10 +3,10 @@
 ```bash
 git clone https://github.com/BarwSirati/nidguayAPI.git
 
+cd nidguayAPI
+
 # API - dev branch
 git checkout dev
-
-cd nidguayAPI
 
 kubectl create -f deployment
 ```
